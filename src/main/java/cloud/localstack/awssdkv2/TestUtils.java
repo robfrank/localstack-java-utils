@@ -19,6 +19,8 @@ public class TestUtils {
      * AWS SDK V2 METHODS
      */
 
+    public static int EDGE_PORT = 4566;
+
     public static KinesisAsyncClient getClientKinesisAsyncV2() {
         return wrapApiClientV2(KinesisAsyncClient.builder(), Localstack.INSTANCE.getEndpointKinesis()).build();
     }
@@ -29,6 +31,10 @@ public class TestUtils {
 
     public static SnsAsyncClient getClientSNSAsyncV2() {
         return wrapApiClientV2(SnsAsyncClient.builder(), Localstack.INSTANCE.getEndpointSNS()).build();
+    }
+
+    public static SnsAsyncClient getClientSNSAsyncEdge() {
+        return wrapApiClientV2(SnsAsyncClient.builder(), Localstack.INSTANCE.endpointForPort(EDGE_PORT)).build();
     }
 
     public static <T extends software.amazon.awssdk.core.client.builder.SdkAsyncClientBuilder> T wrapApiClientV2(T builder, String endpointURL) {
