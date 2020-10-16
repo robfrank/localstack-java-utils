@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.UUID;
 
+import com.amazonaws.services.s3.model.PutObjectResult;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
@@ -76,6 +77,20 @@ public class S3UploadTest {
 		client.putObject(putObjectRequest);
 	}
 
+	@Test
+	public void testUploadBigFile() {
+		AmazonS3 client = TestUtils.getClientS3();
+
+		String bucketName = UUID.randomUUID().toString();
+		String keyName = UUID.randomUUID().toString();
+		client.createBucket(bucketName);
+		String content = String.join("", Collections.nCopies(231072, "abcdefgh"));
+		System.out.println(content.length());
+
+		PutObjectResult result = client.putObject(bucketName, keyName, content);
+		System.out.println(result);
+	}
+
 	private void testUpload(final String dataString) throws Exception {
 		AmazonS3 client = TestUtils.getClientS3();
 
@@ -107,4 +122,7 @@ public class S3UploadTest {
 		client.deleteBucket(bucketName);
 	}
 
+	public static void main(String[] args) {
+		System.out.println("Hello");
+	}
 }
